@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Subject Details</title>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Subject Manager</h1>
+        <div class="auth-section">
+            <%- include('header') %>
+        </div>
+    </header>
+
+    <div class="container">
+        <p><a href="/">&#x2B05; Vissza a főoldalra</a></p>
+
+        <div class="msgs">
+            <% if (message) { %>
+                <div class="success">
+                    <%= message %>
+                </div>
+                <% } %>
+                    <% if (error) { %>
+                        <div class="error">
+                            <%= error %>
+                        </div>
+                        <% } %>
+        </div>
+
+        <% if (subject) { %>
+            <div class="subject_details">
+                <h2>
+                    <%= subject.SubjectName %> (<%= subject.SubjectID %>)
+                </h2>
+
+                <p><strong>Évfolyam:</strong>
+                    <%= subject.SubjectGrade %>
+                </p>
+                <p><strong>Kurzusok száma:</strong>
+                    <%= subject.KurzusNr %>
+                </p>
+                <p><strong>Szemináriumok száma:</strong>
+                    <%= subject.SzemiNr %>
+                </p>
+                <p><strong>Laborok száma:</strong>
+                    <%= subject.LaborNr %>
+                </p>
+
+                <br>
+
+                <div class="materials_list">
+                    <h2>Uploaded files</h2>
+
+                    <% if (materials && materials.length> 0) { %>
+                        <table class="subjects">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Size (byte)</th>
+                                    <th>Download</th>
+                                    <% if (locals.user && subject.OwnerID===locals.user) { %>
+                                        <th>Delete</th>
+                                        <% } %>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% materials.forEach(function(m) { %>
+                                    <tr>
+                                        <td>
+                                            <%= m.MaterialName %>
+                                        </td>
+                                        <td>
+                                            <%= m.Size %>
+                                        </td>
+                                        <td>
+                                            <a href="<%= m.RelativePath %>"
+                                                download="<%= m.MaterialName %>">Download</a>
+                                        </td>
+                                        <% if (locals.user && subject.OwnerID===locals.user) { %>
+                                            <td>
+                                                <button class="delete-file" data-filename="<%= m.MaterialName %>"
+                                                    data-id="<%= subject.SubjectID %>"
+                                                    style="cursor: pointer; color: red">Delete</button>
+                                            </td>
+                                            <% } else { %>
+                                                <td></td>
+                                                <% } %>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                        <% } else { %>
+                            <p>There are no uploaded files yet</p>
+                            <% } %>
+                </div>
+            </div>
+
+            <br>
+
+            <% if (locals.user && subject.OwnerID===locals.user) { %>
+                <form class="new_subject" method="POST" action="/subject/<%= subject.SubjectID %>/upload"
+                    enctype="multipart/form-data">
+                    <label for="files">Válasszon egy file-t</label><br>
+                    <input type="file" id="files" name="files" multiple><br><br>
+                    <button type="submit">Feltoltes</button>
+                </form>
+                <% } %>
+
+                    <% } %>
+    </div>
+
+    <script src="../public/index.js"></script>
+</body>
+
+</html>

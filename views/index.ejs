@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Subjects</title>
+    <link rel="stylesheet" href="/public/style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Subject Manager</h1>
+        <div class="auth-section">
+            <%- include('header') %>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="msgs">
+            <% if (message) { %>
+                <div class="success">
+                    <%= message %>
+                </div>
+                <% } %>
+                    <% if (error) { %>
+                        <div class="error">
+                            <%= error %>
+                        </div>
+                        <% } %>
+        </div>
+
+        <div class="subject_list">
+            <h2>Subjects</h2>
+            <% if (subjects && subjects.length> 0) { %>
+                <table class="subjects">
+                    <thead>
+                        <tr>
+                            <th>Kód</th>
+                            <th>Név</th>
+                            <th>Évfolyam</th>
+                            <th>Részletek</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% subjects.forEach(function(s) { %>
+                            <tr id="row-<%= s.SubjectID %>">
+                                <td class="clickable" data-id="<%= s.SubjectID %>" style="cursor: pointer;">
+                                    <%= s.SubjectID %>
+                                </td>
+                                <td>
+                                    <%= s.SubjectName %>
+                                </td>
+                                <td>
+                                    <%= s.SubjectGrade %>
+                                </td>
+                                <td>
+                                    <a href="/subject/<%= s.SubjectID %>">Részletek</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } else { %>
+                    <p>Nincsek rögzített tantárgyak!</p>
+                    <% } %>
+        </div>
+
+        <form class="new_subject" method="POST" action="/insert">
+            <label for="egyedikod">Egyedi kód</label><br>
+            <input type="text" id="egyedikod" name="egyedikod" value="" required><br>
+            <label for="targyneve">Tárgy neve</label><br>
+            <input type="text" id="targyneve" name="targyneve" value="" required><br>
+            <label for="evfolyam">Evfolyam</label><br>
+            <input type="text" id="evfolyam" name="evfolyam" value="" required><br>
+            <label for="kurzus">Kurzusok száma</label><br>
+            <input type="number" id="kurzus" name="kurzus" value="" required><br>
+            <label for="szemi">Szemináriumok száma</label><br>
+            <input type="number" id="szemi" name="szemi" value="" required><br>
+            <label for="labor">Laborok száma</label><br>
+            <input type="number" id="labor" name="labor" value="" required><br><br>
+            <button type="submit" id="felkuldes" name="felkuldes">Feltöltés</button>
+        </form>
+
+        <form class="new_subject" method="POST" action="/change">
+            <h2>Join/Leave subject</h2>
+
+            <label for="egyedikod">Choose a subject</label><br>
+            <select id="egyedikod" name="egyedikod" required>
+                <option value="" disabled selected>Choose a subject</option>
+                <% subjects.forEach(function(s) { %>
+                    <option value="<%= s.SubjectID %>">
+                        <%= s.SubjectName %> (<%= s.SubjectID %>)
+                    </option>
+                    <% }) %>
+            </select>
+
+            <br>
+
+            <label for="diakid">Choose a user</label><br>
+            <select id="diakid" name="diakid" required>
+                <option value="" disabled selected>Choose a user</option>
+                <% users.forEach(function(u) { %>
+                    <option value="<%= u.UserID %>">
+                        <%= u.FullName %> (ID: <%= u.UserID %>)
+                    </option>
+                    <% }) %>
+            </select><br>
+            <button type="submit" id="felkuldes" name="felkuldes">Change status</button>
+        </form>
+    </div>
+
+    <script src="../public/index.js"></script>
+</body>
+
+</html>
