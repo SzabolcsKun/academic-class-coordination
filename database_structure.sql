@@ -1,7 +1,7 @@
 USE master
 GO
 
---CREATE LOGIN Szabi WITH PASSWORD = 'ksim2463'
+--CREATE LOGIN Username WITH PASSWORD = 'password'
 --GO
 
 --CREATE DATABASE WebProg
@@ -10,8 +10,8 @@ GO
 --USE WebProg
 --GO
 
---CREATE USER Szabi FOR LOGIN Szabi
---GRANT insert, update, delete, connect, execute select TO Szabi
+--CREATE USER Username FOR LOGIN Username
+--GRANT insert, update, delete, connect, execute select TO Username
 --GO
 
 USE WebProg
